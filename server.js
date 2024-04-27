@@ -1,10 +1,12 @@
 const express = require("express");
+const cors = require("cors"); // Import the cors module
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware: Parse request data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors()); // Enable CORS
 
 // Route: GET request to /api
 app.get("/api", (req, res) => {
@@ -16,8 +18,8 @@ app.get("/api", (req, res) => {
   res.json(data);
 });
 
-// Route: POST request to /api
-app.get("/", (req, res) => {
+// Route: POST request to /
+app.post("/", (req, res) => {
   // Assuming the request body contains JSON data
   const data = [
     { id: 1, name: "John" },
