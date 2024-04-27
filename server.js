@@ -1,14 +1,12 @@
 const express = require("express");
-const cors = require("cors"); // Import the cors module
+const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware: Parse request data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors()); // Enable CORS
+app.use(cors());
 
-// Route: GET request to /api
 app.get("/api", (req, res) => {
   const data = [
     { id: 1, name: "John" },
@@ -18,20 +16,14 @@ app.get("/api", (req, res) => {
   res.json(data);
 });
 
-// Route: POST request to /
-app.post("/", (req, res) => {
-  // Assuming the request body contains JSON data
-  const data = [
-    { id: 1, name: "John" },
-    { id: 2, name: "Jane" },
-    { id: 3, name: "Doe" },
-  ];
+// Update the route to handle POST requests to /api
+app.post("/api", (req, res) => {
   const receivedData = req.body;
   console.log("Received data:", receivedData);
-  res.send(data);
+  // Assuming you want to send back the same data as response
+  res.json(receivedData);
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
