@@ -1,29 +1,31 @@
+// server.js
+const { spawn } = require("child_process");
 const express = require("express");
-const cors = require("cors");
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = 3001; // Changing the port to 3001
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+// Define data to be sent to Python script
+const dataToSend = JSON.stringify({ message: "Hello from Node.js!" });
 
-app.get("/api", (req, res) => {
-  const data = [
-    { id: 1, name: "John" },
-    { id: 2, name: "Jane" },
-    { id: 3, name: "Doe" },
-  ];
-  res.json(data);
+// Spawn Python process
+const pythonProcess = spawn("python", ["script.py"]);
+
+// Send data to Python script
+pythonProcess.stdin.write(dataToSend);
+pythonProcess.stdin.end();
+
+// Receive result from Python script
+pythonProcess.stdout.on("data", (data) => {
+  console.log(`Received result from Python: ${data}`);
 });
 
-// Update the route to handle POST requests to /api
-app.post("/api", (req, res) => {
-  const receivedData = req.body;
-  console.log("Received data:", receivedData);
-  // Assuming you want to send back the same data as response
-  res.json(receivedData);
+// Handle Python script exit
+pythonProcess.on("exit", (code) => {
+  console.log(`Python script exited with code ${code}`);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
